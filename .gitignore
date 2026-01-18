@@ -1,0 +1,15 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfplan
+
+
+venv/
+__pycache__/
+*.py[cod]
+
+*.swp
+*~
+
+.vscode/
