@@ -1,5 +1,5 @@
 resource "aws_vpc" "main_vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -10,9 +10,9 @@ resource "aws_vpc" "main_vpc" {
 
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = "10.0.1.0/24" 
+  cidr_block              = var.public_subnet_cidr
   map_public_ip_on_launch = true          
-
+  availability_zone       = "${var.aws_region}a"
   tags = {
     Name = "Public Subnet"
   }
@@ -20,7 +20,8 @@ resource "aws_subnet" "public_subnet" {
 
 resource "aws_subnet" "private_subnet" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.2.0/24"
+  cidr_block        = var.private_subnet_cidr
+  availability_zone = "${var.aws_region}a"
 
   tags = {
     Name = "Private Subnet"
@@ -78,11 +79,10 @@ resource "aws_security_group" "web_sg" {
 }
 
 resource "aws_instance" "web_server" {
-  ami           = "ami-df5de72ade3b42331" 
-  instance_type = "t2.micro"
+  ami           = var.ami_id       
+  instance_type = var.instance_type
 
   subnet_id = aws_subnet.public_subnet.id
-
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   user_data = <<-EOF
