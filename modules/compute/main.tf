@@ -25,12 +25,12 @@ resource "aws_security_group" "web_sg" {
 resource "aws_instance" "web_server" {
   count = terraform.workspace == "prod" ? 2 : 1
 
-  user_data_replace_on_change = true
   ami           = var.ami_id       
   instance_type = terraform.workspace == "prod" ? "t3.medium" : "t2.micro"
 
-  subnet_id = var.public_subnet_id
+  subnet_id = element(var.public_subnet_ids, count.index)
   vpc_security_group_ids = [aws_security_group.web_sg.id]
+  user_data_replace_on_change = true
 
   user_data = <<-EOF
               #!/bin/bash

@@ -8,25 +8,18 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnets" {
+  count = length(var.public_subnet_cidrs)
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = var.public_subnet_cidr
+  cidr_block              = var.public_subnet_cidrs[count.index]
+  availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true          
-  availability_zone       = "${var.aws_region}a"
   tags = {
-    Name = "Public Subnet"
+    Name = "Public-Subnet-${count.index + 1}"
   }
 }
 
-resource "aws_subnet" "private_subnet" {
-  vpc_id     = aws_vpc.main_vpc.id
-  cidr_block        = var.private_subnet_cidr
-  availability_zone = "${var.aws_region}a"
 
-  tags = {
-    Name = "Private Subnet"
-  }
-}
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main_vpc.id
@@ -50,6 +43,8 @@ resource "aws_route_table" "public_rt" {
 }
 
 resource "aws_route_table_association" "public_assoc" {
-  subnet_id      = aws_subnet.public_subnet.id
+  count = length(var.public_subnet_cidrs)
+
+  subnet_id      = aws_subnet.public_subnets[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }

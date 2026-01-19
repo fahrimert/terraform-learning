@@ -3,9 +3,8 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "public_subnet_id" {
-  description = "Sunucunun kurulacagi Subnet ID"
-  type        = string
+variable "public_subnet_ids" {
+  type = list(string)
 }
 
 variable "ami_id" {
