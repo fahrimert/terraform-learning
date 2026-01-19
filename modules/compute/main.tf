@@ -23,19 +23,22 @@ resource "aws_security_group" "web_sg" {
 }
 
 resource "aws_instance" "web_server" {
+  count = terraform.workspace == "prod" ? 2 : 1
+
+  user_data_replace_on_change = true
   ami           = var.ami_id       
-  instance_type = var.instance_type
+  instance_type = terraform.workspace == "prod" ? "t3.medium" : "t2.micro"
 
   subnet_id = var.public_subnet_id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Merhaba Terraform! Bu sunucu kod ile kuruldu , deneme 1 deneme 2 deneme 3." > index.html
+              echo "Merhaba! Ben Sunucu Numara: ${count.index + 1}" > index.html
               python3 -m http.server 80 &
               EOF
 
   tags = {
-    Name = "Terraform-Learning-Web-Server"
+    Name = "Web-Server-${terraform.workspace}-${count.index + 1}"
   }
 }
