@@ -3,7 +3,8 @@ name: "Terraform Infrastructure Deployment"
 on:
   push:
     branches:
-      - main  
+      - main 
+     
   pull_request:
 
 jobs:

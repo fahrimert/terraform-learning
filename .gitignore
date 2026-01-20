@@ -16,3 +16,6 @@ __pycache__/
 assets
 volume
 actions-runner
+
+aws/.terraform.lock.hcl
+azure/.terraform.lock.hcl
