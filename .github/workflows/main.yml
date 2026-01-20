@@ -8,6 +8,9 @@ on:
 
 jobs:
   terraform:
+    defaults:
+      run:
+        working-directory: ./aws
     name: "Terraform Apply"
     runs-on: self-hosted
 
