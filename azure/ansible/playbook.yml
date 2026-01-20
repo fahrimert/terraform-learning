@@ -1,0 +1,48 @@
+---
+- name: Azure Sunucusunu Hazırla
+  hosts: webservers 
+  become: yes
+
+  tasks:
+    - name: Paket listesini güncelle (apt-get update)
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Docker'ı yükle
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Docker servisini başlat ve başlangıçta açılmasını sağla
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: adminuser kullanıcısını Docker grubuna ekle
+      user:
+        name: adminuser
+        groups: docker
+        append: yes
+    - name: Python PIP yükle (Docker modülü için gerekli)
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Python Docker kütüphanesini uyumlu sürümle yükle
+      pip:
+        name:
+          - requests==2.31.0   
+          - docker==6.1.3 
+        state: forcereinstall 
+        executable: pip3
+
+    - name: Basit Web Sitesi Başlat 
+      docker_container:
+        name: my-website
+        image: nginx
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
