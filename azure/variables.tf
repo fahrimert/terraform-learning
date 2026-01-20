@@ -12,3 +12,8 @@ variable "resource_group_name" {
   description = "Kaynak grubu ismi"
   default     = "terraform-azure-rg-final-v4"
 }
+
+variable "ssh_public_key" {
+  description = "GitHub Actions tarafından inject edilecek SSH anahtarı"
+  type        = string
+}

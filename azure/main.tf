@@ -31,6 +31,8 @@ module "compute" {
   location            = azurerm_resource_group.main.location
   vm_size             = var.vm_size
   nic_id              = module.network.nic_id 
+
+  ssh_public_key      = var.ssh_public_key
 }
 
 output "vm_public_ip" {
