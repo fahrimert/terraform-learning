@@ -8,3 +8,16 @@ module "compute" {
   vpc_id           = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids
 }
+module "serverless" {
+  source = "./modules/lambda"
+    
+  table_name = module.database.table_name
+  table_arn  = module.database.table_arn
+}
+output "api_endpoint" {
+  value = "${module.serverless.api_url}/hello"
+}
+
+module "database" {
+  source = "./modules/dynamodb"
+}
