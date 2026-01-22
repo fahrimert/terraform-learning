@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>    <title>Serverless Demo</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #result { margin-top: 20px; color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Merhaba Mert!</h1>
+    <p>Bu site S3 üzerinden, Backend ise Lambda üzerinden çalışıyor.</p>
+    
+    <button onclick="callApi()">Lambda'yı Tetikleme Butonu</button>
+    <div id="result"></div>
+
+    <script>
+        const API_URL = "${api_url}";
+
+        async function callApi() {
+            document.getElementById('result').innerText = "İstek atılıyor...";
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                document.getElementById('result').innerText = data.body; 
+            } catch (error) {
+                document.getElementById('result').innerText = "Hata: " + error;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

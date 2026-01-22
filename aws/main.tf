@@ -21,3 +21,12 @@ output "api_endpoint" {
 module "database" {
   source = "./modules/dynamodb"
 }
+module "frontend" {
+  source = "./modules/front"
+  
+  api_url = "${module.serverless.api_url}/hello"
+}
+
+output "website_url" {
+  value = module.frontend.website_url
+}
