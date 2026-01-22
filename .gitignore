@@ -20,3 +20,7 @@ actions-runner
 aws/.terraform.lock.hcl
 azure/.terraform.lock.hcl
 aws/response.json
+**/.terraform/*
+**/.terragrunt-cache/*
+*.tfstate
+*.tfstate.backup

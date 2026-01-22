@@ -19,6 +19,7 @@ resource "aws_iam_role" "iam_for_lambda" {
   })
 }
 
+
 resource "aws_lambda_function" "test_lambda" {
   filename      = data.archive_file.lambda_zip.output_path
   function_name = "hello-world-function"
@@ -45,8 +46,6 @@ resource "aws_iam_role_policy" "lambda_dynamo_policy" {
       {
         Action = [
           "dynamodb:PutItem",
-          "dynamodb:GetItem",
-          "dynamodb:Scan"
         ]
         Effect   = "Allow"
         Resource = var.table_arn

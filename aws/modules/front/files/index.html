@@ -16,16 +16,26 @@
 
     <script>
         const API_URL = "${api_url}";
+        const API_KEY = "${api_key}"; 
 
         async function callApi() {
             document.getElementById('result').innerText = "İstek atılıyor...";
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'x-api-key': API_KEY 
+                    }
+                });
+                
+                if (response.status === 403) {
+                    throw new Error("Yetkisiz Giriş! (403 Forbidden)");
+                }
+
                 const data = await response.json();
                 document.getElementById('result').innerText = data.body; 
             } catch (error) {
                 document.getElementById('result').innerText = "Hata: " + error;
-                console.error(error);
             }
         }
     </script>

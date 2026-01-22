@@ -14,6 +14,8 @@ resource "aws_api_gateway_method" "hello_method" {
   resource_id   = aws_api_gateway_resource.hello_resource.id
   http_method   = "GET"
   authorization = "NONE"
+
+  api_key_required = true
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
@@ -51,4 +53,32 @@ resource "aws_lambda_permission" "api_gw" {
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_api_gateway_rest_api.lambda_api.execution_arn}/*/*"
+}
+resource "aws_api_gateway_api_key" "my_key" {
+  name = "mert-api-key"
+}
+
+resource "aws_api_gateway_usage_plan" "my_plan" {
+  name = "basic-plan"
+
+  throttle_settings {
+    burst_limit = 10
+    rate_limit  = 5
+  }
+
+  quota_settings {
+    limit  = 1000
+    period = "DAY"
+  }
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.lambda_api.id
+    stage  = aws_api_gateway_deployment.deployment.stage_name
+  }
+}
+
+resource "aws_api_gateway_usage_plan_key" "main" {
+  key_id        = aws_api_gateway_api_key.my_key.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.my_plan.id
 }

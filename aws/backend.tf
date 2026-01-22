@@ -1,15 +1,11 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-storage" 
+    bucket         = "mert-tf-state-2026-ocak"
     key            = "global/s3/terraform.tfstate" 
     region         = "us-east-1"
-    
+    dynamodb_table = "terraform-locks"
     encrypt        = true
 
-    endpoints = {
-      s3       = "http://localhost:4566"
-      dynamodb = "http://localhost:4566"
-    }
     
     skip_credentials_validation = true
     skip_metadata_api_check     = true

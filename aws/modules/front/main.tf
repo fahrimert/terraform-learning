@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "website_bucket" {
-  bucket = "my-serverless-website-mert" 
+  bucket = "my-serverless-website-mert-2026-v1" 
 }
 
 resource "aws_s3_bucket_public_access_block" "website_public" {
@@ -44,5 +44,6 @@ resource "aws_s3_object" "index_html" {
 
 content = templatefile("${path.module}/files/index.html", {
       api_url = var.api_url
+      api_key = var.api_key
   })
 }
