@@ -70,3 +70,9 @@ resource "github_branch" "development" {
   
   source_branch = "main"
 }
+
+resource "github_repository_collaborator" "partner" {
+  repository = github_repository.example.name
+  username   = var.collaborator_username
+  permission = "push"
+}

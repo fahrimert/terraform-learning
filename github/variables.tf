@@ -3,3 +3,7 @@ variable "github_token" {
   type        = string
   sensitive   = true
 }
+variable "collaborator_username" {
+    description = "Projeye eklenecek kisinin GitHub kullanici adi"
+  type        = string
+}
