@@ -24,3 +24,5 @@ aws/response.json
 **/.terragrunt-cache/*
 *.tfstate
 *.tfstate.backup
+
+**/*.tfvars
